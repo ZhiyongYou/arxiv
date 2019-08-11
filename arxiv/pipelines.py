@@ -9,12 +9,11 @@ from bs4 import BeautifulSoup
 
 class ArxivPipeline(object):
     def process_item(self, item, spider):
+        Relativity = 0
         reg = re.compile(r'(WFCTA|LHAASO|Hillas)')
         match_value = {'WFCTA':2,'LHAASO':1,'Hillas':2}
-        Relativity = 0
 
-        soup = item['name']
-        match = reg.finditer(soup.blockquote.contents[1])
+        match = reg.finditer(item['abstract'])
 
         for matched in match:
             if matched:
@@ -24,5 +23,5 @@ class ArxivPipeline(object):
             with open("essay.txt",'a') as fp:
                 fp.write("Relativity:")
                 fp.write('%d' % Relativity)
-                fp.write("\nTitle:"+soup.title.contents[0] + "\nAbstract:" + soup.blockquote.contents[1] + "\n")
+                fp.write("\nTitle:" + item['title'] + "\nAbstract:" + item['abstract'] + "\n")
 
